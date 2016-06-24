@@ -13,7 +13,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:keypadButtonSize="75dp"
-        app:keypadDeleteButtonDrawable="@drawable/ic_backspace_white_24dp"
         app:keypadDeleteButtonPressedColor="@color/white_glass75"
         app:keypadDeleteButtonSize="25dp"
         app:keypadHorizontalSpacing="50dp"

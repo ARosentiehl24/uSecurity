@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 
 public class RequestPinFragment extends SlideFragment {
 
-
     @Bind(R.id.pinLockView)
     PinLockView pinLockView;
     @Bind(R.id.indicatorDots)
