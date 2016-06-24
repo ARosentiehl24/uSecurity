@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
 import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
-import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
+import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 
 public class IntroductionActivity extends IntroActivity {
 
@@ -48,20 +48,6 @@ public class IntroductionActivity extends IntroActivity {
             }
         });
 
-        addSlide(new SimpleSlide.Builder()
-                .title(R.string.app_name)
-                .description(R.string.app_name)
-                .image(R.mipmap.ic_launcher)
-                .background(R.color.colorPrimary)
-                .backgroundDark(R.color.colorPrimaryDark)
-                .build());
-
-        addSlide(new SimpleSlide.Builder()
-                .title(R.string.app_name)
-                .description(R.string.app_name)
-                .image(R.mipmap.ic_launcher)
-                .background(R.color.colorPrimary)
-                .backgroundDark(R.color.colorPrimaryDark)
-                .build());
+        addSlide(new FragmentSlide.Builder().background(R.color.colorPrimary).backgroundDark(R.color.colorPrimary).fragment(RequestPinFragment.newInstance()).build());
     }
 }
