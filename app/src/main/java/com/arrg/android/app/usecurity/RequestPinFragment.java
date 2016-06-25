@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.andrognito.pinlockview.IndicatorDots;
+import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
 
@@ -36,7 +37,6 @@ public class RequestPinFragment extends SlideFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_request_pin, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -47,6 +47,22 @@ public class RequestPinFragment extends SlideFragment {
         super.onViewCreated(view, savedInstanceState);
 
         pinLockView.attachIndicatorDots(indicatorDots);
+        pinLockView.setPinLockListener(new PinLockListener() {
+            @Override
+            public void onComplete(String pin) {
+
+            }
+
+            @Override
+            public void onEmpty() {
+
+            }
+
+            @Override
+            public void onPinChange(int pinLength, String intermediatePin) {
+
+            }
+        });
     }
 
     @Override

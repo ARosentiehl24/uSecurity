@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.arrg.android.app.usecurity.RequestPatternFragment">
+
+    <TextView
+        android:id="@+id/tvRequestPatternMessage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/draw_a_pattern"
+        android:textColor="@color/white_glass75"
+        android:textSize="20sp" />
+
+    <com.arrg.android.app.usecurity.MaterialLockView
+        android:id="@+id/materialLockView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:CORRECT_COLOR="@color/white_glass75"
+        app:LOCK_COLOR="@color/white_glass75"
+        app:WRONG_COLOR="@color/material_red_500" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="75dp" />
+</LinearLayout>

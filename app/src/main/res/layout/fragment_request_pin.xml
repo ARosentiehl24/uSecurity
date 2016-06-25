@@ -1,17 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.arrg.android.app.usecurity.RequestPinFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tvRequestPinMessage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/set_a_pin"
+        android:textColor="@color/white_glass75"
+        android:textSize="20sp" />
+
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/indicatorDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
+        app:dotDiameter="20dp"
+        app:dotEmptyBackground="@drawable/dot_empty_background"
+        app:dotFilledBackground="@drawable/dot_filled_background"
+        app:dotSpacing="20dp" />
+
     <com.andrognito.pinlockview.PinLockView
         android:id="@+id/pinLockView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        app:keypadButtonBackgroundDrawable="@drawable/dot_empty_background"
         app:keypadButtonSize="75dp"
         app:keypadDeleteButtonPressedColor="@color/white_glass75"
         app:keypadDeleteButtonSize="25dp"
@@ -22,16 +45,7 @@
         app:keypadVerticalSpacing="20dp"
         app:pinLength="4" />
 
-    <com.andrognito.pinlockview.IndicatorDots
-        android:id="@+id/indicatorDots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/pinLockView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
-        app:dotDiameter="20dp"
-        app:dotEmptyBackground="@drawable/dot_empty_background"
-        app:dotFilledBackground="@drawable/dot_filled_background"
-        app:dotSpacing="20dp" />
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="75dp" />
+</LinearLayout>
