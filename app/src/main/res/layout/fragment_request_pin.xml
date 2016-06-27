@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,10 +6,32 @@
     android:orientation="vertical"
     tools:context="com.arrg.android.app.usecurity.RequestPinFragment">
 
+    <com.andrognito.pinlockview.PinLockView
+        android:id="@+id/pinLockView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="25dp"
+        app:keypadButtonBackgroundDrawable="@drawable/dot_empty_background"
+        app:keypadButtonSize="75dp"
+        app:keypadDeleteButtonDrawable="@drawable/ic_arrow_back_midnight_blue_24dp"
+        app:keypadDeleteButtonPressedColor="@color/midnight_blue75"
+        app:keypadDeleteButtonSize="25dp"
+        app:keypadHorizontalSpacing="50dp"
+        app:keypadShowDeleteButton="true"
+        app:keypadTextColor="@color/midnight_blue75"
+        app:keypadTextSize="25sp"
+        app:keypadVerticalSpacing="20dp"
+        app:pinLength="4" />
+
     <com.andrognito.pinlockview.IndicatorDots
         android:id="@+id/indicatorDots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/pinLockView"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="25dp"
         android:layout_marginTop="25dp"
@@ -17,20 +39,4 @@
         app:dotEmptyBackground="@drawable/dot_empty_background"
         app:dotFilledBackground="@drawable/dot_filled_background"
         app:dotSpacing="20dp" />
-
-    <com.andrognito.pinlockview.PinLockView
-        android:id="@+id/pinLockView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:keypadButtonBackgroundDrawable="@drawable/dot_empty_background"
-        app:keypadButtonSize="75dp"
-        app:keypadDeleteButtonPressedColor="@color/white_glass75"
-        app:keypadDeleteButtonSize="25dp"
-        app:keypadHorizontalSpacing="50dp"
-        app:keypadShowDeleteButton="true"
-        app:keypadTextColor="@color/white_glass75"
-        app:keypadTextSize="25sp"
-        app:keypadVerticalSpacing="20dp"
-        app:pinLength="4" />
-</LinearLayout>
+</RelativeLayout>

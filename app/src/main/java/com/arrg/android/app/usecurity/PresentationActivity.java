@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.badoualy.stepperindicator.StepperIndicator;
 
@@ -29,17 +31,42 @@ public class PresentationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_presentation);
         ButterKnife.bind(this);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
         fragments = new ArrayList<>();
+        fragments.add(WelcomeFragment.newInstance());
         fragments.add(RequestPinFragment.newInstance());
         fragments.add(RequestPatternFragment.newInstance());
-        fragments.add(RequestFingerprintFragment.newInstance());
+
+        FingerprintManagerCompat fingerprintManagerCompat = FingerprintManagerCompat.from(this);
+        if (fingerprintManagerCompat.isHardwareDetected()) {
+            fragments.add(RequestFingerprintFragment.newInstance());
+        }
+
+        fragments.add(FinishFragment.newInstance());
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        stepperIndicator.setViewPager(viewPager);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        stepperIndicator.setViewPager(viewPager, fragments.size() - 1);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

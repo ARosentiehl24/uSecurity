@@ -20,20 +20,32 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tvRequestMessages"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="@string/request_pin_message"
-                android:textColor="@color/primary_text_default_dark" />
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
     <com.badoualy.stepperindicator.StepperIndicator
         android:id="@+id/stepperIndicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:stpi_animDuration="250"
+        app:stpi_circleColor="@color/midnight_blue"
+        app:stpi_circleStrokeWidth="2.5dp"
+        app:stpi_indicatorColor="@color/midnight_blue75"
+        app:stpi_indicatorRadius="5dp"
+        app:stpi_lineColor="@color/midnight_blue50"
+        app:stpi_lineDoneColor="@color/midnight_blue"
+        app:stpi_lineMargin="2.5dp"
+        app:stpi_lineStrokeWidth="2.5dp"
+        app:stpi_stepCount="5" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
@@ -43,7 +55,35 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="50dp"
+        android:background="@drawable/background_light_dark_with_shadow"
+        android:elevation="10dp">
 
+        <android.support.v7.widget.AppCompatButton
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_bar_background"
+            android:drawableStart="@drawable/ic_chevron_left_midnight_blue_24dp"
+            android:text="@string/previous"
+            android:textColor="@color/midnight_blue" />
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/button_bar_background"
+            android:text="@string/let_s_start"
+            android:textColor="@color/midnight_blue" />
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_bar_background"
+            android:drawableEnd="@drawable/ic_chevron_right_midnight_blue_24dp"
+            android:text="@string/next"
+            android:textColor="@color/midnight_blue" />
     </LinearLayout>
 </LinearLayout>

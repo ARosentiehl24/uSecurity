@@ -2,18 +2,18 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="IntroductionAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/background_light</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="ButtonBar" parent="Widget.AppCompat.Button.Borderless">
@@ -22,7 +22,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/button_bar_background</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/white_glass75</item>
+        <item name="android:textColor">@color/midnight_blue75</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
