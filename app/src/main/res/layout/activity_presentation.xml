@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.arrg.android.app.usecurity.IntroActivity">
+    tools:context=".PresentationActivity">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="125dp"
         app:cardBackgroundColor="@color/colorPrimaryDark"
         app:cardCornerRadius="0dp">
 
@@ -30,9 +30,20 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <com.badoualy.stepperindicator.StepperIndicator
+        android:id="@+id/stepperIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
+
+    </LinearLayout>
 </LinearLayout>

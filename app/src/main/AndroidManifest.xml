@@ -26,20 +26,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+
         <activity
             android:name=".IntroductionActivity"
             android:theme="@style/IntroductionAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ApplicationListActivity" />
         <activity
-            android:name=".IntroActivity"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme">
+            android:theme="@style/IntroductionAppTheme"
+            android:name=".PresentationActivity"
+            android:label="@string/title_activity_intro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

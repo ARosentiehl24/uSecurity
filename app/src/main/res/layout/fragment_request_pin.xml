@@ -6,29 +6,6 @@
     android:orientation="vertical"
     tools:context="com.arrg.android.app.usecurity.RequestPinFragment">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
-        app:cardCornerRadius="0dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tvRequestPinMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_margin="25dp"
-                android:gravity="center"
-                android:text="@string/request_pin_message"
-                android:textColor="@color/white_glass75"
-                android:textSize="20sp" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
     <com.andrognito.pinlockview.IndicatorDots
         android:id="@+id/indicatorDots"
         android:layout_width="wrap_content"
@@ -56,8 +33,4 @@
         app:keypadTextSize="25sp"
         app:keypadVerticalSpacing="20dp"
         app:pinLength="4" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="75dp" />
 </LinearLayout>
