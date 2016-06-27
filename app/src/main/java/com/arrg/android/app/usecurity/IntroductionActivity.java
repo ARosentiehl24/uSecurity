@@ -34,16 +34,7 @@ public class IntroductionActivity extends AppIntro {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-                askForPermissions(new String[]{Manifest.permission.USE_FINGERPRINT}, 3);
-
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
 
@@ -79,5 +70,6 @@ public class IntroductionActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+        Navigator.with(this).build().goTo(ApplicationListActivity.class).animation().commit();
     }
 }
