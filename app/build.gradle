@@ -64,6 +64,7 @@ dependencies {
     compile 'com.dmitrymalkovich.android:material-design-dimens:1.2'
     compile 'com.eightbitlab:blurview:1.0.4'
     compile 'com.github.2359media:EasyAndroidAnimations:0.8'
+    compile 'com.github.badoualy:stepper-indicator:1.0.2'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.4'
     compile 'com.github.javiersantos:AppUpdater:2.1.1'
     compile 'com.github.nisrulz:easydeviceinfo:2.0.1'

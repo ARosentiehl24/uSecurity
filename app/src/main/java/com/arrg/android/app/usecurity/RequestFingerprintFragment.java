@@ -38,7 +38,5 @@ public class RequestFingerprintFragment extends Fragment implements FragmentComp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
 }

@@ -5,4 +5,8 @@
     <string name="fingerprint_setting_message">To enable fingerprint press the corresponding button</string>
     <string name="enable_fingerprint_support">Enable Fingerprint Support</string>
     <string name="disable_fingerprint_support">Disable Fingerprint Support</string>
+    <string name="fingerprints_registered">You have registered %s fingerprints</string>
+    <string name="title_activity_intro">USecurity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

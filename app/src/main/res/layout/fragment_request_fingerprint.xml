@@ -34,24 +34,32 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+        <RelativeLayout
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="@drawable/dot_empty_background"
+            android:gravity="center">
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="0dp"
-                android:layout_height="75dp"
-                android:layout_weight="1"
-                android:text="@string/enable_fingerprint_support" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="0dp"
-                android:layout_height="75dp"
-                android:layout_weight="1"
-                android:text="@string/disable_fingerprint_support" />
-        </LinearLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="144dp"
+                android:layout_height="144dp"
+                android:layout_centerInParent="true"
+                app:srcCompat="@drawable/ic_fingerprint_white_48dp" />
+        </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnLogin"
+            style="@style/ButtonBar"
+            android:text="@string/enable_fingerprint_support" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

@@ -1,14 +1,11 @@
 package com.arrg.android.app.usecurity;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.afollestad.assent.Assent;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -32,13 +29,9 @@ public class IntroductionActivity extends AppIntro {
             addSlide(RequestPatternFragment.newInstance());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+                FingerprintManagerCompat fingerprintManagerCompat = FingerprintManagerCompat.from(this);
 
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-
-                if (fingerprintManager.isHardwareDetected()) {
+                if (fingerprintManagerCompat.isHardwareDetected()) {
                     addSlide(RequestFingerprintFragment.newInstance());
                 }
             }
@@ -70,6 +63,8 @@ public class IntroductionActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        Navigator.with(this).build().goTo(ApplicationListActivity.class).animation().commit();
+        /*Navigator.with(this).build().goTo(ApplicationListActivity.class).animation().commit();
+        finish();*/
+        getPager().setCurrentItem(0);
     }
 }
