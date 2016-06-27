@@ -6,24 +6,36 @@
     android:orientation="vertical"
     tools:context="com.arrg.android.app.usecurity.RequestPinFragment">
 
-    <TextView
-        android:id="@+id/tvRequestPinMessage"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/set_a_pin"
-        android:textColor="@color/white_glass75"
-        android:textSize="20sp" />
+        android:layout_height="150dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardCornerRadius="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvRequestPinMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="25dp"
+                android:gravity="center"
+                android:text="@string/request_pin_message"
+                android:textColor="@color/white_glass75"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <com.andrognito.pinlockview.IndicatorDots
         android:id="@+id/indicatorDots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
         app:dotDiameter="20dp"
         app:dotEmptyBackground="@drawable/dot_empty_background"
         app:dotFilledBackground="@drawable/dot_filled_background"

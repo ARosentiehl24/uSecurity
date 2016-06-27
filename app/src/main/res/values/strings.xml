@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">uSecurity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="set_a_pin">Set a pin</string>
-    <string name="draw_a_pattern">Draw a pattern</string>
+    <string name="request_pin_message">Please enter 4 digits that you can remember easily</string>
+    <string name="request_pattern_message">Please draw a pattern that you can remember</string>
+    <string name="fingerprint_setting_message">To enable fingerprint press the corresponding button</string>
+    <string name="enable_fingerprint_support">Enable Fingerprint Support</string>
+    <string name="disable_fingerprint_support">Disable Fingerprint Support</string>
 </resources>

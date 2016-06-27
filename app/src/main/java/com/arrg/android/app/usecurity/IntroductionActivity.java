@@ -12,6 +12,9 @@ import android.support.v4.content.ContextCompat;
 
 import com.afollestad.assent.Assent;
 import com.github.paolorotolo.appintro.AppIntro;
+import com.shawnlin.preferencesmanager.PreferencesManager;
+
+import org.fingerlinks.mobile.android.navigator.Navigator;
 
 public class IntroductionActivity extends AppIntro {
 
@@ -20,37 +23,47 @@ public class IntroductionActivity extends AppIntro {
         super.onCreate(savedInstanceState);
         Assent.setActivity(this, this);
 
-        addSlide(RequestPinFragment.newInstance());
-        addSlide(RequestPatternFragment.newInstance());
+        boolean settingsDone = PreferencesManager.getBoolean(getString(R.string.settings_done), false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+        if (settingsDone) {
+            Navigator.with(this).build().goTo(ApplicationListActivity.class).commit();
+        } else {
+            addSlide(RequestPinFragment.newInstance());
+            addSlide(RequestPatternFragment.newInstance());
 
-            askForPermissions(new String[]{Manifest.permission.USE_FINGERPRINT}, 3);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
+                askForPermissions(new String[]{Manifest.permission.USE_FINGERPRINT}, 3);
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+
+                if (fingerprintManager.isHardwareDetected()) {
+                    addSlide(RequestFingerprintFragment.newInstance());
+                }
             }
 
-            if (fingerprintManager.isHardwareDetected()) {
-                addSlide(RequestFingerprintFragment.newInstance());
-            }
+            setGoBackLock(true);
+            showSkipButton(false);
+            setSwipeLock(true);
+
+            setBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            setSeparatorColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+            getPager().setBackgroundResource(R.color.colorPrimary);
+
+            setVibrate(true);
+            setVibrateIntensity(10);
         }
-
-        setBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        setSeparatorColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-
-        getPager().setBackgroundResource(R.color.colorPrimary);
-
-        setVibrate(true);
-        setVibrateIntensity(10);
     }
 
     @Override
