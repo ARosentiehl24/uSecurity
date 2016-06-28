@@ -40,8 +40,15 @@ public class PresentationActivity extends AppCompatActivity {
     @Bind(R.id.main_content)
     LinearLayout mainContent;
 
+    public static final int PIN = 0;
+    public static final int PATTERN = 1;
+    public static final int FINGERPRINT = 2;
+
     private ArrayList<Fragment> fragments;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private String pinMessage;
+    private String patternMessage;
+    private String fingerprintMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,11 @@ public class PresentationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_presentation);
         ButterKnife.bind(this);
         TypefaceHelper.typeface(this);
+        Util.setImmersiveMode(this);
+
+        updateText(PIN, R.string.request_pin_message);
+        updateText(PATTERN, R.string.request_pattern_message);
+        updateText(FINGERPRINT, R.string.fingerprint_setting_message);
 
         fragments = new ArrayList<>();
         fragments.add(RequestPinFragment.newInstance());
@@ -74,19 +86,17 @@ public class PresentationActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
-                    case 0:
+                    case PIN:
                         btnAux.setText(R.string.reset_pin);
-                        tvRequestMessages.setText(R.string.request_pin_message);
+                        tvRequestMessages.setText(pinMessage);
                         break;
-                    case 1:
+                    case PATTERN:
                         btnAux.setText(R.string.reset_pattern);
-                        tvRequestMessages.setText(R.string.request_pattern_message);
+                        tvRequestMessages.setText(patternMessage);
                         break;
-                    case 2:
+                    case FINGERPRINT:
                         btnAux.setText(R.string.enable_fingerprint_support);
-                        tvRequestMessages.setText(R.string.fingerprint_setting_message);
-                        break;
-                    case 3:
+                        tvRequestMessages.setText(fingerprintMessage);
                         break;
                 }
 
@@ -114,18 +124,16 @@ public class PresentationActivity extends AppCompatActivity {
                 break;
             case R.id.btnAux:
                 switch (viewPager.getCurrentItem()) {
-                    case 0:
+                    case PIN:
                         PreferencesManager.putString(getString(R.string.user_pin), "");
 
                         updateText(R.string.request_pin_message);
 
                         ((RequestPinFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem())).resetPinView();
                         break;
-                    case 1:
+                    case PATTERN:
                         break;
-                    case 2:
-                        break;
-                    case 3:
+                    case FINGERPRINT:
                         break;
                 }
                 break;
@@ -137,6 +145,22 @@ public class PresentationActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public void updateText(int position, int text) {
+        switch (position) {
+            case PIN:
+                pinMessage = getString(text);
+                break;
+            case PATTERN:
+                patternMessage = getString(text);
+                break;
+            case FINGERPRINT:
+                fingerprintMessage = getString(text);
+                break;
+        }
+
+        updateText(text);
     }
 
     public void updateText(int text) {

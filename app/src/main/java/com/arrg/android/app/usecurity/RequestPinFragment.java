@@ -44,6 +44,11 @@ public class RequestPinFragment extends SlideFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_request_pin, container, false);
         ButterKnife.bind(this, view);
@@ -66,19 +71,21 @@ public class RequestPinFragment extends SlideFragment {
                             @Override
                             public void run() {
                                 if (pinWasConfigured()) {
-                                    if (userPin().equals(pin)) {
-                                        presentationActivity.updateText(R.string.pin_configured_message);
+                                    if (pinLockView.isIndicatorDotsAttached()) {
+                                        if (userPin().equals(pin)) {
+                                            presentationActivity.updateText(PresentationActivity.PIN, R.string.pin_configured_message);
 
-                                        pinLockView.attachIndicatorDots(null);
-                                    } else {
-                                        presentationActivity.updateText(R.string.wrong_pin_message);
+                                            pinLockView.attachIndicatorDots(null);
+                                        } else {
+                                            presentationActivity.updateText(PresentationActivity.PIN, R.string.wrong_pin_message);
 
-                                        pinLockView.resetPinLockView();
+                                            pinLockView.resetPinLockView();
+                                        }
                                     }
                                 } else {
                                     PreferencesManager.putString(getString(R.string.user_pin), pin);
 
-                                    presentationActivity.updateText(R.string.confirm_pin_message);
+                                    presentationActivity.updateText(PresentationActivity.PIN, R.string.confirm_pin_message);
 
                                     pinLockView.resetPinLockView();
                                 }

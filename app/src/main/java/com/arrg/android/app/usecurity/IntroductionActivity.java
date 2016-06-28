@@ -24,6 +24,7 @@ public class IntroductionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_introduction);
         ButterKnife.bind(this);
         TypefaceHelper.typeface(this);
+        Util.setImmersiveMode(this);
 
         tvAppName.setText(String.format(getString(R.string.welcome_to_usecurity), getString(R.string.app_name)));
 
