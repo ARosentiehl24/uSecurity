@@ -4,4 +4,5 @@
     <string name="font_position">font_position</string>
     <string name="user_pin">user_pin</string>
     <string name="user_pattern">user_pattern</string>
+    <string name="fingerprint_recognition_activated">fingerprint_recognition_activated</string>
 </resources>

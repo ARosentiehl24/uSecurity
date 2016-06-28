@@ -1,6 +1,8 @@
 package com.arrg.android.app.usecurity;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.norbsoft.typefacehelper.TypefaceHelper;
@@ -26,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PresentationActivity extends AppCompatActivity {
+
 
     @Bind(R.id.stepperIndicator)
     StepperIndicator stepperIndicator;
@@ -45,8 +49,11 @@ public class PresentationActivity extends AppCompatActivity {
     public static final int PIN = 0;
     public static final int PATTERN = 1;
     public static final int FINGERPRINT = 2;
+    public static final int USAGE_STATS = 3;
+    public static final int OVERLAY_PERMISSION = 4;
 
     private ArrayList<Fragment> fragments;
+    private Boolean fingerprintRecognition;
     private FingerprintManagerCompat fingerprintManagerCompat;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private String pinMessage;
@@ -59,7 +66,8 @@ public class PresentationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_presentation);
         ButterKnife.bind(this);
         TypefaceHelper.typeface(this);
-        Util.setImmersiveMode(this);
+
+        fingerprintRecognition = PreferencesManager.getBoolean(getString(R.string.fingerprint_recognition_activated), false);
 
         updateText(FINGERPRINT, R.string.fingerprint_setting_message);
         updateText(PATTERN, R.string.request_pattern_message);
@@ -74,6 +82,8 @@ public class PresentationActivity extends AppCompatActivity {
             fragments.add(RequestFingerprintFragment.newInstance());
         }
 
+        fragments.add(RequestPermissionsFragment.newInstance(R.string.usage_stats_permission, R.drawable.ic_usage_stats, R.string.usage_stats_permission_description));
+        fragments.add(RequestPermissionsFragment.newInstance(R.string.usage_stats_permission, R.drawable.ic_usage_stats, R.string.usage_stats_permission_description));
         fragments.add(FinishFragment.newInstance());
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -98,8 +108,12 @@ public class PresentationActivity extends AppCompatActivity {
                         tvRequestMessages.setText(patternMessage);
                         break;
                     case FINGERPRINT:
-                        btnAux.setText(R.string.enable_fingerprint_support);
+                        btnAux.setText(fingerprintRecognition ? R.string.disable_fingerprint_support : R.string.enable_fingerprint_support);
                         tvRequestMessages.setText(fingerprintMessage);
+                        break;
+                    default:
+                        btnAux.setText(R.string.grant_permission);
+                        tvRequestMessages.setText(R.string.permissions_request_message);
                         break;
                 }
 
@@ -115,6 +129,12 @@ public class PresentationActivity extends AppCompatActivity {
         });
 
         stepperIndicator.setViewPager(viewPager, fragments.size() - 1);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Util.setImmersiveMode(this);
     }
 
     @OnClick({R.id.btnPrevious, R.id.btnAux, R.id.btnNextDone})
@@ -142,8 +162,38 @@ public class PresentationActivity extends AppCompatActivity {
                         ((RequestPatternFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem())).resetPattern();
                         break;
                     case FINGERPRINT:
+                        if (fingerprintManagerCompat.hasEnrolledFingerprints()) {
+                            if (fingerprintRecognition) {
+                                Toast.makeText(this, R.string.fingerprint_disable_message, Toast.LENGTH_SHORT).show();
+
+                                PreferencesManager.putBoolean(getString(R.string.fingerprint_recognition_activated), false);
+
+                                btnAux.setText(R.string.enable_fingerprint_support);
+                            } else {
+                                Toast.makeText(this, R.string.fingerprint_enable_message, Toast.LENGTH_SHORT).show();
+
+                                PreferencesManager.putBoolean(getString(R.string.fingerprint_recognition_activated), true);
+
+                                btnAux.setText(R.string.disable_fingerprint_support);
+                            }
+
+                            fingerprintRecognition = PreferencesManager.getBoolean(getString(R.string.fingerprint_recognition_activated), false);
+                        } else {
+                            Toast.makeText(this, R.string.add_fingerprint_message, Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
                             startActivity(intent);
+                        }
+                        break;
+                    case USAGE_STATS:
+                        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                        break;
+                    case OVERLAY_PERMISSION:
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())));
+                            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                        }
                         break;
                 }
                 break;

@@ -16,6 +16,9 @@
     <string name="fingerprint_setting_message">To enable fingerprint press the corresponding button</string>
     <string name="enable_fingerprint_support">Enable Fingerprint</string>
     <string name="disable_fingerprint_support">Disable Fingerprint</string>
+    <string name="add_fingerprint_message">Please add a fingerprint to activate this feature</string>
+    <string name="fingerprint_enable_message">Function activated, this function runs as priority</string>
+    <string name="fingerprint_disable_message">Function deactivated</string>
 
     <string name="welcome_to_usecurity">Welcome to %s</string>
 
@@ -23,4 +26,10 @@
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="done">Done</string>
+
+    <string name="grant_permission">Grant permission</string>
+    <string name="permissions_request_message">It is necessary that grants certain permissions to work properly</string>
+
+    <string name="usage_stats_permission">Allow the use of statistics</string>
+    <string name="usage_stats_permission_description">Please enable the use of statistics for better application performance</string>
 </resources>
