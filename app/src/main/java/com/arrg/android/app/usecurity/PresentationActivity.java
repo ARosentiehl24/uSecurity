@@ -1,6 +1,8 @@
 package com.arrg.android.app.usecurity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -45,6 +47,7 @@ public class PresentationActivity extends AppCompatActivity {
     public static final int FINGERPRINT = 2;
 
     private ArrayList<Fragment> fragments;
+    private FingerprintManagerCompat fingerprintManagerCompat;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private String pinMessage;
     private String patternMessage;
@@ -58,15 +61,15 @@ public class PresentationActivity extends AppCompatActivity {
         TypefaceHelper.typeface(this);
         Util.setImmersiveMode(this);
 
-        updateText(PIN, R.string.request_pin_message);
-        updateText(PATTERN, R.string.request_pattern_message);
         updateText(FINGERPRINT, R.string.fingerprint_setting_message);
+        updateText(PATTERN, R.string.request_pattern_message);
+        updateText(PIN, R.string.request_pin_message);
 
         fragments = new ArrayList<>();
         fragments.add(RequestPinFragment.newInstance());
         fragments.add(RequestPatternFragment.newInstance());
 
-        FingerprintManagerCompat fingerprintManagerCompat = FingerprintManagerCompat.from(this);
+        fingerprintManagerCompat = FingerprintManagerCompat.from(this);
         if (fingerprintManagerCompat.isHardwareDetected()) {
             fragments.add(RequestFingerprintFragment.newInstance());
         }
@@ -127,13 +130,20 @@ public class PresentationActivity extends AppCompatActivity {
                     case PIN:
                         PreferencesManager.putString(getString(R.string.user_pin), "");
 
-                        updateText(R.string.request_pin_message);
+                        updateText(PIN, R.string.request_pin_message);
 
                         ((RequestPinFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem())).resetPinView();
                         break;
                     case PATTERN:
+                        PreferencesManager.putString(getString(R.string.user_pattern), "");
+
+                        updateText(PATTERN, R.string.request_pattern_message);
+
+                        ((RequestPatternFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem())).resetPattern();
                         break;
                     case FINGERPRINT:
+                            Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                            startActivity(intent);
                         break;
                 }
                 break;

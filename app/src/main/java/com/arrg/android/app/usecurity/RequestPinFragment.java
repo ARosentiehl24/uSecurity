@@ -37,22 +37,13 @@ public class RequestPinFragment extends SlideFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.presentationActivity = (PresentationActivity) getActivity();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        presentationActivity = (PresentationActivity) getActivity();
+
         View view = inflater.inflate(R.layout.fragment_request_pin, container, false);
         ButterKnife.bind(this, view);
         TypefaceHelper.typeface(view);
+
         return view;
     }
 
@@ -111,6 +102,8 @@ public class RequestPinFragment extends SlideFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+
+        presentationActivity = null;
     }
 
     public boolean pinWasConfigured() {
