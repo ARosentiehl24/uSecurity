@@ -44,9 +44,7 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile('com.afollestad:assent:0.2.2') {
-        transitive = true
-    }
+    compile 'com.afollestad:assent:0.2.4'
     compile('com.afollestad.material-dialogs:commons:0.8.5.9') {
         exclude module: 'core'
     }
@@ -71,6 +69,7 @@ dependencies {
     compile 'com.heinrichreimersoftware:material-intro:1.5.4'
     compile 'com.github.paolorotolo:appintro:4.0.0'
     compile 'com.mattprecious.swirl:swirl:1.0.0'
+    compile 'com.mukesh:permissions:1.0.3'
     compile 'com.norbsoft.typefacehelper:library:0.9.0'
     compile 'com.pavelsikun:materialdesignicons:1.0'
     compile 'com.roughike:bottom-bar:1.3.9'

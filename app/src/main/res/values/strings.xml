@@ -32,4 +32,18 @@
 
     <string name="usage_stats_permission">Allow the use of statistics</string>
     <string name="usage_stats_permission_description">Please enable the use of statistics for better application performance</string>
+    <string name="overlay_permission">Overlay Permission</string>
+    <string name="overlay_permission_description">It is necessary to display the lock screen</string>
+    <string name="write_settings_permission">Write Settings Permission</string>
+    <string name="write_settings_permission_description">It is necessary to setup cool features</string>
+    <string name="media_permission">Media Permission</string>
+    <string name="media_permission_description">Permission required to customize the background of the lock screen and other features</string>
+    <string name="phone_permission">Permission to make calls</string>
+    <string name="phone_permission_description">Permission required to open a uSecurity when not in the application drawer</string>
+    <string name="permission_granted">Permission granted</string>
+    <string name="permission_not_granted">Permission not granted</string>
+    <string name="permission_already_granted">Permission already granted</string>
+    <string name="all_permissions_granted">All permissions granted</string>
+    <string name="all_permissions_not_granted">All permissions not granted</string>
+    <string name="all_permission_already_granted">All permission already granted</string>
 </resources>

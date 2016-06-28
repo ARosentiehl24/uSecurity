@@ -1,10 +1,13 @@
 package com.arrg.android.app.usecurity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,11 +21,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.afollestad.assent.Assent;
 import com.badoualy.stepperindicator.StepperIndicator;
+import com.mukesh.permissions.AppPermissions;
 import com.norbsoft.typefacehelper.TypefaceHelper;
 import com.shawnlin.preferencesmanager.PreferencesManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,12 +52,23 @@ public class PresentationActivity extends AppCompatActivity {
     @Bind(R.id.main_content)
     LinearLayout mainContent;
 
+    private static final String[] STORAGE_PERMISSIONS = {
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     public static final int PIN = 0;
     public static final int PATTERN = 1;
+
     public static final int FINGERPRINT = 2;
     public static final int USAGE_STATS = 3;
     public static final int OVERLAY_PERMISSION = 4;
+    public static final int WRITE_SETTINGS = 5;
+    public static final int MEDIA_PERMISSION = 6;
+    public static final int PHONE_PERMISSION = 7;
+    public static final int STORAGE_PERMISSION_RC = 100;
+    private static final int OUTGOING_CALLS_PERMISSION_RC = 101;
 
+    private AppPermissions appPermissions;
     private ArrayList<Fragment> fragments;
     private Boolean fingerprintRecognition;
     private FingerprintManagerCompat fingerprintManagerCompat;
@@ -64,27 +81,38 @@ public class PresentationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presentation);
+        Assent.setActivity(this, this);
         ButterKnife.bind(this);
         TypefaceHelper.typeface(this);
 
+        appPermissions = new AppPermissions(this);
         fingerprintRecognition = PreferencesManager.getBoolean(getString(R.string.fingerprint_recognition_activated), false);
-
-        updateText(FINGERPRINT, R.string.fingerprint_setting_message);
-        updateText(PATTERN, R.string.request_pattern_message);
-        updateText(PIN, R.string.request_pin_message);
 
         fragments = new ArrayList<>();
         fragments.add(RequestPinFragment.newInstance());
         fragments.add(RequestPatternFragment.newInstance());
 
         fingerprintManagerCompat = FingerprintManagerCompat.from(this);
-        if (fingerprintManagerCompat.isHardwareDetected()) {
-            fragments.add(RequestFingerprintFragment.newInstance());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (fingerprintManagerCompat.isHardwareDetected()) {
+                fragments.add(RequestFingerprintFragment.newInstance());
+                updateText(FINGERPRINT, R.string.fingerprint_setting_message);
+            }
+            fragments.add(RequestPermissionsFragment.newInstance(R.string.usage_stats_permission, R.drawable.ic_usage_stats, R.string.usage_stats_permission_description));
+            fragments.add(RequestPermissionsFragment.newInstance(R.string.overlay_permission, R.drawable.ic_overlay_permission, R.string.overlay_permission_description));
+            fragments.add(RequestPermissionsFragment.newInstance(R.string.write_settings_permission, R.drawable.ic_write_settings_permission, R.string.write_settings_permission_description));
+            fragments.add(RequestPermissionsFragment.newInstance(R.string.media_permission, R.drawable.ic_media_permission, R.string.media_permission_description));
+            fragments.add(RequestPermissionsFragment.newInstance(R.string.phone_permission, R.drawable.ic_phone_permission, R.string.phone_permission_description));
+        } else {
+            if (fingerprintManagerCompat.isHardwareDetected()) {
+                fragments.add(RequestFingerprintFragment.newInstance());
+                updateText(FINGERPRINT, R.string.fingerprint_setting_message);
+            }
         }
-
-        fragments.add(RequestPermissionsFragment.newInstance(R.string.usage_stats_permission, R.drawable.ic_usage_stats, R.string.usage_stats_permission_description));
-        fragments.add(RequestPermissionsFragment.newInstance(R.string.usage_stats_permission, R.drawable.ic_usage_stats, R.string.usage_stats_permission_description));
         fragments.add(FinishFragment.newInstance());
+
+        updateText(PATTERN, R.string.request_pattern_message);
+        updateText(PIN, R.string.request_pin_message);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -117,6 +145,7 @@ public class PresentationActivity extends AppCompatActivity {
                         break;
                 }
 
+                btnAux.setVisibility(position != fragments.size() - 1 ? View.VISIBLE : View.INVISIBLE);
                 btnPrevious.setVisibility(position >= 1 ? View.VISIBLE : View.INVISIBLE);
                 btnNextDone.setText(position != fragments.size() - 1 ? R.string.next : R.string.done);
                 btnNextDone.setCompoundDrawablesWithIntrinsicBounds(null, null, position != fragments.size() - 1 ? ContextCompat.getDrawable(PresentationActivity.this, R.drawable.ic_chevron_right_midnight_blue_24dp) : null, null);
@@ -195,6 +224,26 @@ public class PresentationActivity extends AppCompatActivity {
                             overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
                         }
                         break;
+                    case WRITE_SETTINGS:
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            startActivity(new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + getPackageName())));
+                            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+                        }
+                        break;
+                    case MEDIA_PERMISSION:
+                        if (!appPermissions.hasPermission(STORAGE_PERMISSIONS)) {
+                            appPermissions.requestPermission(STORAGE_PERMISSIONS, STORAGE_PERMISSION_RC);
+                        } else {
+                            Toast.makeText(this, R.string.all_permissions_granted, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case PHONE_PERMISSION:
+                        if (!appPermissions.hasPermission(Manifest.permission.PROCESS_OUTGOING_CALLS)) {
+                            appPermissions.requestPermission(Manifest.permission.PROCESS_OUTGOING_CALLS, OUTGOING_CALLS_PERMISSION_RC);
+                        } else {
+                            Toast.makeText(this, R.string.permission_already_granted, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
                 }
                 break;
             case R.id.btnNextDone:
@@ -202,6 +251,31 @@ public class PresentationActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
 
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case STORAGE_PERMISSION_RC:
+                List<Integer> permissionResults = new ArrayList<>();
+                for (int grantResult : grantResults) {
+                    permissionResults.add(grantResult);
+                }
+                if (permissionResults.contains(PackageManager.PERMISSION_DENIED)) {
+                    Toast.makeText(this, R.string.all_permissions_not_granted, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.all_permissions_granted, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case OUTGOING_CALLS_PERMISSION_RC:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
