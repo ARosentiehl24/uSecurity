@@ -27,15 +27,18 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
 
-        <activity
-            android:name=".PresentationActivity"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/IntroductionAppTheme">
+        <activity android:name=".IntroductionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PresentationActivity"
+            android:label="@string/title_activity_intro"
+            android:theme="@style/IntroductionAppTheme">
+
         </activity>
         <activity android:name=".ApplicationListActivity" />
     </application>

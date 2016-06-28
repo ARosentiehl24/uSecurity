@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.badoualy.stepperindicator.StepperIndicator;
 
@@ -30,8 +29,7 @@ public class PresentationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presentation);
         ButterKnife.bind(this);
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        com.norbsoft.typefacehelper.TypefaceHelper.typeface(this);
 
         fragments = new ArrayList<>();
         fragments.add(WelcomeFragment.newInstance());
