@@ -251,18 +251,9 @@ public class PresentationActivity extends AppCompatActivity {
                 if (viewPager.getCurrentItem() != fragments.size() - 1) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
-                    list.clear();
-
-                    list.add(pinWasConfigured());
-                    list.add(patternWasConfigured());
-                    list.add(hasEnrolledFingerprints());
-                    list.add(usageStatsIsNotEmpty());
-                    list.add(overlayPermissionGranted());
-                    list.add(writeSettingsPermissionGranted());
-                    list.add(mediaPermissionGranted());
-                    list.add(phonePermissionGranted());
-
                     if (allSettingsAndPermissionsAreReady()) {
+                        PreferencesManager.putBoolean(getString(R.string.settings_done), allSettingsAndPermissionsAreReady());
+
                         Navigator.with(this).build().goTo(ApplicationListActivity.class).animation().commit();
                         finish();
                     } else {
@@ -329,6 +320,19 @@ public class PresentationActivity extends AppCompatActivity {
         }
     }
 
+    public void checkForValues(){
+        list.clear();
+
+        list.add(pinWasConfigured());
+        list.add(patternWasConfigured());
+        list.add(hasEnrolledFingerprints());
+        list.add(usageStatsIsNotEmpty());
+        list.add(overlayPermissionGranted());
+        list.add(writeSettingsPermissionGranted());
+        list.add(mediaPermissionGranted());
+        list.add(phonePermissionGranted());
+    }
+
     public Boolean pinWasConfigured() {
         return userPin().length() != 0;
     }
@@ -378,6 +382,8 @@ public class PresentationActivity extends AppCompatActivity {
     }
 
     public Boolean allSettingsAndPermissionsAreReady() {
+        checkForValues();
+
         return !list.contains(false);
     }
 

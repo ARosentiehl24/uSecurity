@@ -46,4 +46,8 @@
     <string name="all_permissions_granted">All permissions granted</string>
     <string name="all_permissions_not_granted">All permissions not granted</string>
     <string name="all_permission_already_granted">All permission already granted</string>
+    <string name="all_settings_and_permissions_are_ready_message">All settings and permissions are ready press done to start</string>
+    <string name="all_settings_and_permissions_are_not_ready_message">All settings and permissions are not ready, please make a review</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
 </resources>
