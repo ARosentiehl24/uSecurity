@@ -61,9 +61,9 @@ public class RequestPinFragment extends SlideFragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (pinWasConfigured()) {
+                                if (presentationActivity.pinWasConfigured()) {
                                     if (pinLockView.isIndicatorDotsAttached()) {
-                                        if (userPin().equals(pin)) {
+                                        if (presentationActivity.userPin().equals(pin)) {
                                             presentationActivity.updateText(PresentationActivity.PIN, R.string.pin_configured_message);
 
                                             pinLockView.attachIndicatorDots(null);
@@ -104,14 +104,6 @@ public class RequestPinFragment extends SlideFragment {
         ButterKnife.unbind(this);
 
         presentationActivity = null;
-    }
-
-    public boolean pinWasConfigured() {
-        return userPin().length() != 0;
-    }
-
-    public String userPin() {
-        return PreferencesManager.getString(getString(R.string.user_pin), "");
     }
 
     public void resetPinView() {

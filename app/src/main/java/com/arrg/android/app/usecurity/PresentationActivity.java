@@ -18,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.afollestad.assent.Assent;
@@ -26,6 +25,8 @@ import com.badoualy.stepperindicator.StepperIndicator;
 import com.mukesh.permissions.AppPermissions;
 import com.norbsoft.typefacehelper.TypefaceHelper;
 import com.shawnlin.preferencesmanager.PreferencesManager;
+
+import org.fingerlinks.mobile.android.navigator.Navigator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PresentationActivity extends AppCompatActivity {
-
 
     @Bind(R.id.stepperIndicator)
     StepperIndicator stepperIndicator;
@@ -49,8 +49,6 @@ public class PresentationActivity extends AppCompatActivity {
     AppCompatButton btnNextDone;
     @Bind(R.id.btnAux)
     AppCompatButton btnAux;
-    @Bind(R.id.main_content)
-    LinearLayout mainContent;
 
     private static final String[] STORAGE_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -65,10 +63,12 @@ public class PresentationActivity extends AppCompatActivity {
     public static final int WRITE_SETTINGS = 5;
     public static final int MEDIA_PERMISSION = 6;
     public static final int PHONE_PERMISSION = 7;
-    public static final int STORAGE_PERMISSION_RC = 100;
-    private static final int OUTGOING_CALLS_PERMISSION_RC = 101;
+    public static final int WRITE_SETTINGS_PERMISSION_RC = 100;
+    public static final int STORAGE_PERMISSION_RC = 101;
+    public static final int OUTGOING_CALLS_PERMISSION_RC = 102;
 
     private AppPermissions appPermissions;
+    private ArrayList<Boolean> list;
     private ArrayList<Fragment> fragments;
     private Boolean fingerprintRecognition;
     private FingerprintManagerCompat fingerprintManagerCompat;
@@ -87,6 +87,7 @@ public class PresentationActivity extends AppCompatActivity {
 
         appPermissions = new AppPermissions(this);
         fingerprintRecognition = PreferencesManager.getBoolean(getString(R.string.fingerprint_recognition_activated), false);
+        list = new ArrayList<>();
 
         fragments = new ArrayList<>();
         fragments.add(RequestPinFragment.newInstance());
@@ -191,7 +192,7 @@ public class PresentationActivity extends AppCompatActivity {
                         ((RequestPatternFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem())).resetPattern();
                         break;
                     case FINGERPRINT:
-                        if (fingerprintManagerCompat.hasEnrolledFingerprints()) {
+                        if (hasEnrolledFingerprints()) {
                             if (fingerprintRecognition) {
                                 Toast.makeText(this, R.string.fingerprint_disable_message, Toast.LENGTH_SHORT).show();
 
@@ -250,7 +251,47 @@ public class PresentationActivity extends AppCompatActivity {
                 if (viewPager.getCurrentItem() != fragments.size() - 1) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
+                    list.clear();
 
+                    list.add(pinWasConfigured());
+                    list.add(patternWasConfigured());
+                    list.add(hasEnrolledFingerprints());
+                    list.add(usageStatsIsNotEmpty());
+                    list.add(overlayPermissionGranted());
+                    list.add(writeSettingsPermissionGranted());
+                    list.add(mediaPermissionGranted());
+                    list.add(phonePermissionGranted());
+
+                    if (allSettingsAndPermissionsAreReady()) {
+                        Navigator.with(this).build().goTo(ApplicationListActivity.class).animation().commit();
+                        finish();
+                    } else {
+                        if (!pinWasConfigured()) {
+                            viewPager.setCurrentItem(PIN);
+                        } else if (!patternWasConfigured()) {
+                            viewPager.setCurrentItem(PATTERN);
+                        } else {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (!hasEnrolledFingerprints()) {
+                                    viewPager.setCurrentItem(FINGERPRINT);
+                                } else if (!usageStatsIsNotEmpty()) {
+                                    viewPager.setCurrentItem(USAGE_STATS);
+                                } else if (!overlayPermissionGranted()) {
+                                    viewPager.setCurrentItem(OVERLAY_PERMISSION);
+                                } else if (!writeSettingsPermissionGranted()) {
+                                    viewPager.setCurrentItem(WRITE_SETTINGS);
+                                } else if (!mediaPermissionGranted()) {
+                                    viewPager.setCurrentItem(MEDIA_PERMISSION);
+                                } else if (!phonePermissionGranted()) {
+                                    viewPager.setCurrentItem(PHONE_PERMISSION);
+                                }
+                            } else {
+                                if (!hasEnrolledFingerprints()) {
+                                    viewPager.setCurrentItem(FINGERPRINT);
+                                }
+                            }
+                        }
+                    }
                 }
                 break;
         }
@@ -260,6 +301,13 @@ public class PresentationActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
+            case WRITE_SETTINGS_PERMISSION_RC:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
+                }
+                break;
             case STORAGE_PERMISSION_RC:
                 List<Integer> permissionResults = new ArrayList<>();
                 for (int grantResult : grantResults) {
@@ -279,6 +327,58 @@ public class PresentationActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public Boolean pinWasConfigured() {
+        return userPin().length() != 0;
+    }
+
+    public String userPin() {
+        return PreferencesManager.getString(getString(R.string.user_pin), "");
+    }
+
+    public Boolean patternWasConfigured() {
+        return userPattern().length() != 0;
+    }
+
+    public String userPattern() {
+        return PreferencesManager.getString(getString(R.string.user_pattern), "");
+    }
+
+    public Boolean hasEnrolledFingerprints() {
+        return fingerprintManagerCompat.hasEnrolledFingerprints();
+    }
+
+    public Boolean usageStatsIsNotEmpty() {
+        return !UsageStatsUtil.getUsageStatsList(this).isEmpty();
+    }
+
+    public Boolean overlayPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return (Settings.canDrawOverlays(this));
+        } else {
+            return true;
+        }
+    }
+
+    public Boolean writeSettingsPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return Settings.System.canWrite(this);
+        } else {
+            return true;
+        }
+    }
+
+    public Boolean mediaPermissionGranted() {
+        return appPermissions.hasPermission(STORAGE_PERMISSIONS);
+    }
+
+    public Boolean phonePermissionGranted() {
+        return appPermissions.hasPermission(Manifest.permission.PROCESS_OUTGOING_CALLS);
+    }
+
+    public Boolean allSettingsAndPermissionsAreReady() {
+        return !list.contains(false);
     }
 
     public void updateText(int position, int text) {

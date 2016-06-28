@@ -66,9 +66,9 @@ public class RequestPatternFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (patternWasConfigured()) {
+                                if (presentationActivity.patternWasConfigured()) {
                                     if (materialLockView.isEnabled()) {
-                                        if (userPattern().equals(SimplePattern)) {
+                                        if (presentationActivity.userPattern().equals(SimplePattern)) {
                                             presentationActivity.updateText(PresentationActivity.PATTERN, R.string.pattern_configured_message);
 
                                             materialLockView.setEnabled(false);
@@ -91,14 +91,6 @@ public class RequestPatternFragment extends Fragment {
                 }, 250);
             }
         });
-    }
-
-    private boolean patternWasConfigured() {
-        return userPattern().length() != 0;
-    }
-
-    private String userPattern() {
-        return PreferencesManager.getString(getString(R.string.user_pattern), "");
     }
 
     public void resetPattern() {
