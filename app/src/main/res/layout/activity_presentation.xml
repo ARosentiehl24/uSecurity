@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:stpi_animDuration="250"
+        app:stpi_animDuration="50"
         app:stpi_circleColor="@color/midnight_blue"
         app:stpi_circleStrokeWidth="2.5dp"
         app:stpi_indicatorColor="@color/midnight_blue75"
@@ -60,24 +60,29 @@
         android:elevation="10dp">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnPrevious"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="125dp"
             android:layout_height="match_parent"
             android:background="@drawable/button_bar_background"
             android:drawableStart="@drawable/ic_chevron_left_midnight_blue_24dp"
             android:text="@string/previous"
-            android:textColor="@color/midnight_blue" />
+            android:textColor="@color/midnight_blue"
+            android:visibility="invisible" />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnAux"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_bar_background"
-            android:text="@string/let_s_start"
-            android:textColor="@color/midnight_blue" />
+            android:text="@string/reset_pin"
+            android:textColor="@color/midnight_blue"
+            android:visibility="visible" />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnNextDone"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="125dp"
             android:layout_height="match_parent"

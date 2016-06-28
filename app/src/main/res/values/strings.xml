@@ -3,8 +3,8 @@
     <string name="request_pin_message">Please enter 4 digits that you can remember easily</string>
     <string name="request_pattern_message">Please draw a pattern that you can remember</string>
     <string name="fingerprint_setting_message">To enable fingerprint press the corresponding button</string>
-    <string name="enable_fingerprint_support">Enable Fingerprint Support</string>
-    <string name="disable_fingerprint_support">Disable Fingerprint Support</string>
+    <string name="enable_fingerprint_support">Enable Fingerprint</string>
+    <string name="disable_fingerprint_support">Disable Fingerprint</string>
     <string name="fingerprints_registered">You have registered %s fingerprints</string>
     <string name="title_activity_intro">USecurity</string>
     <string name="action_settings">Settings</string>
@@ -12,8 +12,11 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="let_s_start">Let\'s Start</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_to_usecurity">Welcome to %s</string>
+    <string name="done">Done</string>
+    <string name="reset_pin">Reset Pin</string>
+    <string name="reset_pattern">Reset Pattern</string>
+    <string name="confirm_pin_message">Please enter the pin again to confirm</string>
+    <string name="pin_configured_message">The pin has been configured correctly</string>
+    <string name="wrong_pin_message">The pin is wrong, please enter the pin again</string>
 </resources>

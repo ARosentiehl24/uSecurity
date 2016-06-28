@@ -7,7 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.norbsoft.typefacehelper.TypefaceHelper;
 
 import java.util.List;
 
@@ -20,8 +21,6 @@ import butterknife.ButterKnife;
  */
 public class RequestPatternFragment extends Fragment {
 
-    @Bind(R.id.tvRequestPatternMessage)
-    TextView tvRequestPatternMessage;
     @Bind(R.id.materialLockView)
     MaterialLockView materialLockView;
 
@@ -43,6 +42,7 @@ public class RequestPatternFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_request_pattern, container, false);
         ButterKnife.bind(this, view);
+        TypefaceHelper.typeface(view);
         return view;
     }
 

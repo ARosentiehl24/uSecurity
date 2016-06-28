@@ -3,7 +3,6 @@ package com.arrg.android.app.usecurity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RequestFingerprintFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback {
+public class RequestFingerprintFragment extends Fragment {
 
     public RequestFingerprintFragment() {
         // Required empty public constructor
