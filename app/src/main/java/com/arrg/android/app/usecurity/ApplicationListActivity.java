@@ -1,15 +1,19 @@
 package com.arrg.android.app.usecurity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,10 +28,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.arrg.android.app.usecurity.USecurity.DURATIONS_OF_ANIMATIONS;
+import static com.arrg.android.app.usecurity.USecurity.LOCKED_APPS_PREFERENCES;
+import static com.arrg.android.app.usecurity.USecurity.PACKAGES_APPS_PREFERENCES;
 
 public class ApplicationListActivity extends AppCompatActivity {
 
@@ -35,14 +44,20 @@ public class ApplicationListActivity extends AppCompatActivity {
     Toolbar toolbar;
     @Bind(R.id.initialView)
     View initialView;
-    @Bind(R.id.btnBack)
-    AppCompatImageButton btnBack;
     @Bind(R.id.searchInput)
     AppCompatEditText searchInput;
     @Bind(R.id.revealView)
     LinearLayout revealView;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
+    @Bind(R.id.sideBar)
+    SideBar sideBar;
+
+    private ArrayList<App> apps;
+    private Integer index;
+    private SharedPreferences lockedAppsPreferences;
+    private SharedPreferences packagesAppsPreferences;
+    private SharedPreferencesUtil preferencesUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +68,54 @@ public class ApplicationListActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+        apps = new ArrayList<>();
+        preferencesUtil = new SharedPreferencesUtil(this);
+        lockedAppsPreferences = getSharedPreferences(LOCKED_APPS_PREFERENCES, Context.MODE_PRIVATE);
+        packagesAppsPreferences = getSharedPreferences(PACKAGES_APPS_PREFERENCES, Context.MODE_PRIVATE);
 
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                ArrayList<App> filteredApps = new ArrayList<>();
+
+                for (App app : apps) {
+                    if (app.getAppName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        filteredApps.add(app);
+                    }
+                }
+
+                AppAdapter appAdapter = new AppAdapter(ApplicationListActivity.this, filteredApps, lockedAppsPreferences, packagesAppsPreferences, preferencesUtil);
+                recyclerView.setAdapter(appAdapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+            @Override
+            public void onTouchingLetterChanged(String s) {
+                index = 0;
+
+                for (App app : apps){
+                    if (app.getAppName().substring(0, 1).toUpperCase().equals(s.toUpperCase())) {
+                        break;
+                    }
+                    index++;
+                }
+
+                recyclerView.scrollToPosition(index);
+
+                Log.e("Scroll", "Child: " + recyclerView.getChildCount());
+            }
+        });
 
         new LoadApplications().execute();
     }
@@ -72,9 +134,9 @@ public class ApplicationListActivity extends AppCompatActivity {
             case R.id.action_search:
                 Revealator.reveal(revealView)
                         .from(initialView)
-                        .withRevealDuration(200)
-                        .withChildAnimationDuration(200)
-                        .withTranslateDuration(200)
+                        .withRevealDuration(DURATIONS_OF_ANIMATIONS)
+                        .withChildAnimationDuration(DURATIONS_OF_ANIMATIONS)
+                        .withTranslateDuration(DURATIONS_OF_ANIMATIONS)
                         .withChildsAnimation()
                         .start();
                 break;
@@ -89,7 +151,14 @@ public class ApplicationListActivity extends AppCompatActivity {
     @OnClick(R.id.btnBack)
     public void onClick() {
         Revealator.unreveal(revealView)
-                .withDuration(200)
+                .withDuration(DURATIONS_OF_ANIMATIONS)
+                .withEndAction(new TimerTask() {
+                    @Override
+                    public void run() {
+                        AppAdapter appAdapter = new AppAdapter(ApplicationListActivity.this, apps, lockedAppsPreferences, packagesAppsPreferences, preferencesUtil);
+                        recyclerView.setAdapter(appAdapter);
+                    }
+                })
                 .start();
     }
 
@@ -138,11 +207,26 @@ public class ApplicationListActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<App> apps) {
             super.onPostExecute(apps);
 
-            AppAdapter appAdapter = new AppAdapter();
+            ApplicationListActivity.this.apps = apps;
+
+            AppAdapter appAdapter = new AppAdapter(ApplicationListActivity.this, apps, lockedAppsPreferences, packagesAppsPreferences, preferencesUtil);
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL_LIST));
             recyclerView.setAdapter(appAdapter);
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+            });
         }
     }
 }

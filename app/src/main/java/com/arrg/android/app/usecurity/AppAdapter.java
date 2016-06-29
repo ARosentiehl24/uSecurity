@@ -3,12 +3,17 @@ package com.arrg.android.app.usecurity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
@@ -39,7 +44,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        App app = apps.get(position);
 
+        holder.appIcon.setImageDrawable(app.getAppIcon());
+        holder.appName.setText(app.getAppName());
+        holder.circleCheckBox.setEnabled(preferencesUtil.getBoolean(lockedAppsPreferences, app.getAppPackage(), false));
     }
 
     @Override
@@ -58,14 +67,27 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+        @Bind(R.id.appIcon)
+        AppCompatImageView appIcon;
+        @Bind(R.id.appName)
+        AppCompatTextView appName;
+        @Bind(R.id.circleCheckBox)
+        CircleCheckBox circleCheckBox;
 
         public ViewHolder(View itemView, Activity context, ArrayList<App> apps, SharedPreferencesUtil preferencesUtil, SharedPreferences lockedAppsPreferences) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+            App app = apps.get(getLayoutPosition());
+            app.setChecked(!app.getChecked());
 
+            circleCheckBox.setChecked(app.getChecked());
         }
 
         @Override

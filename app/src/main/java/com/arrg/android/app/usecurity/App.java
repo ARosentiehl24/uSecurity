@@ -2,9 +2,11 @@ package com.arrg.android.app.usecurity;
 
 import android.graphics.drawable.Drawable;
 
+import com.cardinalsolutions.sectioned_adapter.Categorizable;
+
 import java.io.Serializable;
 
-public class App implements Serializable {
+public class App implements Categorizable, Serializable {
 
     private Boolean isChecked = false;
     private Drawable appIcon;
@@ -51,5 +53,10 @@ public class App implements Serializable {
 
     public void setAppPackage(String appPackage) {
         this.appPackage = appPackage;
+    }
+
+    @Override
+    public String getCategory() {
+        return appName.substring(0, 1);
     }
 }
