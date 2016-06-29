@@ -1,9 +1,13 @@
 package com.arrg.android.app.usecurity;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,8 +16,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.jaouan.revealator.Revealator;
+import com.norbsoft.typefacehelper.TypefaceHelper;
 
 import org.fingerlinks.mobile.android.navigator.Navigator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,8 +49,13 @@ public class ApplicationListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application_list);
         ButterKnife.bind(this);
+        TypefaceHelper.typeface(this);
 
         setSupportActionBar(toolbar);
+
+
+
+        new LoadApplications().execute();
     }
 
     @Override
@@ -76,5 +91,58 @@ public class ApplicationListActivity extends AppCompatActivity {
         Revealator.unreveal(revealView)
                 .withDuration(200)
                 .start();
+    }
+
+    public ArrayList<App> getInstalledApplications(List<ApplicationInfo> applicationInfoList) {
+        ArrayList<App> apps = new ArrayList<>();
+
+        for (ApplicationInfo applicationInfo : applicationInfoList) {
+            try {
+                if (getPackageManager().getLaunchIntentForPackage(applicationInfo.packageName) != null) {
+                    App app = new App();
+                    app.setAppIcon(applicationInfo.loadIcon(getPackageManager()));
+                    app.setAppName(applicationInfo.loadLabel(getPackageManager()).toString());
+                    app.setAppPackage(applicationInfo.packageName);
+                    apps.add(app);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return apps;
+    }
+
+    public class LoadApplications extends AsyncTask<Void, Void, ArrayList<App>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<App> doInBackground(Void... voids) {
+            ArrayList<App> apps = getInstalledApplications(getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA));
+
+            Collections.sort(apps, new Comparator<App>() {
+                @Override
+                public int compare(App lhs, App rhs) {
+                    return lhs.getAppName().compareTo(rhs.getAppName());
+                }
+            });
+
+            return apps;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<App> apps) {
+            super.onPostExecute(apps);
+
+            AppAdapter appAdapter = new AppAdapter();
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(appAdapter);
+        }
     }
 }
