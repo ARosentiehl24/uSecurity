@@ -13,4 +13,8 @@ public class Util {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
     }
+
+    public static boolean isNotNull(Object o) {
+        return o != null;
+    }
 }

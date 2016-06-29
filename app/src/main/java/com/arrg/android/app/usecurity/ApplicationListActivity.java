@@ -1,7 +1,6 @@
 package com.arrg.android.app.usecurity;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
@@ -13,6 +12,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.jaouan.revealator.Revealator;
+
+import org.fingerlinks.mobile.android.navigator.Navigator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,34 +57,24 @@ public class ApplicationListActivity extends AppCompatActivity {
             case R.id.action_search:
                 Revealator.reveal(revealView)
                         .from(initialView)
-                        .withRevealDuration(50)
-                        .withChildAnimationDuration(50)
-                        .withTranslateDuration(50)
+                        .withRevealDuration(200)
+                        .withChildAnimationDuration(200)
+                        .withTranslateDuration(200)
                         .withChildsAnimation()
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.background_light_dark));
-                            }
-                        })
                         .start();
                 break;
             case R.id.action_settings:
+                Navigator.with(this).build().goTo(SettingsActivity.class).animation().commit();
                 break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.btnBack)
     public void onClick() {
         Revealator.unreveal(revealView)
-                .withDuration(50)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-                    }
-                })
+                .withDuration(200)
                 .start();
     }
 }

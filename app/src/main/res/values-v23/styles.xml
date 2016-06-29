@@ -5,8 +5,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="USecurityToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:homeAsUpIndicator">@drawable/ic_chevron_left_midnight_blue_24dp</item>
+        <item name="android:textColorPrimary">@color/primary_text_default_light</item>
+        <item name="android:textColorSecondary">@color/midnight_blue</item>
     </style>
 </resources>

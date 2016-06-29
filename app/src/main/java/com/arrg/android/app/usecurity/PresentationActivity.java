@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -106,6 +107,8 @@ public class PresentationActivity extends AppCompatActivity {
             if (fingerprintManagerCompat.isHardwareDetected()) {
                 fragments.add(RequestFingerprintFragment.newInstance());
                 updateText(FINGERPRINT, R.string.fingerprint_setting_message);
+            } else {
+                updateText(FINGERPRINT, R.string.fingerprint_setting_message);
             }
         }
         fragments.add(FinishFragment.newInstance());
@@ -142,6 +145,10 @@ public class PresentationActivity extends AppCompatActivity {
                         btnAux.setText(R.string.grant_permission);
                         tvRequestMessages.setText(R.string.permissions_request_message);
                         break;
+                }
+
+                if (position == fragments.size() - 1) {
+                    tvRequestMessages.setText(R.string.we_finished);
                 }
 
                 btnAux.setVisibility(position != fragments.size() - 1 ? View.VISIBLE : View.INVISIBLE);
@@ -318,17 +325,32 @@ public class PresentationActivity extends AppCompatActivity {
         }
     }
 
-    public void checkForValues(){
+    public void checkForValues() {
         list.clear();
 
         list.add(pinWasConfigured());
         list.add(patternWasConfigured());
-        list.add(hasEnrolledFingerprints());
-        list.add(usageStatsIsNotEmpty());
-        list.add(overlayPermissionGranted());
-        list.add(writeSettingsPermissionGranted());
-        list.add(mediaPermissionGranted());
-        list.add(phonePermissionGranted());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!hasEnrolledFingerprints()) {
+                list.add(hasEnrolledFingerprints());
+            }
+            list.add(usageStatsIsNotEmpty());
+            list.add(overlayPermissionGranted());
+            list.add(writeSettingsPermissionGranted());
+            list.add(mediaPermissionGranted());
+            list.add(phonePermissionGranted());
+        } else {
+            if (fingerprintManagerCompat.isHardwareDetected()) {
+                if (!hasEnrolledFingerprints()) {
+                    list.add(hasEnrolledFingerprints());
+                }
+            }
+        }
+
+        for (Boolean aBoolean : list) {
+            Log.e("Values", "Value: " + aBoolean.toString());
+        }
     }
 
     public Boolean pinWasConfigured() {
