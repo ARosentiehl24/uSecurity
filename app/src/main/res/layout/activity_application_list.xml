@@ -13,14 +13,60 @@
         app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="0dp">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <io.codetail.widget.RevealFrameLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:id="@+id/initialView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_margin="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/revealView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_light_dark"
+                    android:visibility="invisible">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/btnBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/material_layout_app_bar_icon_padding"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_arrow_back_midnight_blue_24dp" />
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/searchInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/search"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:maxLines="1" />
+                </LinearLayout>
+            </io.codetail.widget.RevealFrameLayout>
+        </FrameLayout>
     </android.support.v7.widget.CardView>
 
-
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

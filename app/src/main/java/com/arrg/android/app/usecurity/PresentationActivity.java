@@ -20,7 +20,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.assent.Assent;
 import com.badoualy.stepperindicator.StepperIndicator;
 import com.mukesh.permissions.AppPermissions;
 import com.norbsoft.typefacehelper.TypefaceHelper;
@@ -81,7 +80,6 @@ public class PresentationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presentation);
-        Assent.setActivity(this, this);
         ButterKnife.bind(this);
         TypefaceHelper.typeface(this);
 

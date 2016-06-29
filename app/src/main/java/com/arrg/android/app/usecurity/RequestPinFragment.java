@@ -4,6 +4,7 @@ package com.arrg.android.app.usecurity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
-import com.heinrichreimersoftware.materialintro.app.SlideFragment;
 import com.norbsoft.typefacehelper.TypefaceHelper;
 import com.shawnlin.preferencesmanager.PreferencesManager;
 
@@ -19,7 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class RequestPinFragment extends SlideFragment {
+public class RequestPinFragment extends Fragment {
 
     @Bind(R.id.pinLockView)
     PinLockView pinLockView;
