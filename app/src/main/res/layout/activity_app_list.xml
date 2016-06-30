@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.arrg.android.app.usecurity.ApplicationListActivity">
+    android:fitsSystemWindows="true"
+    tools:context="com.arrg.android.app.usecurity.AppListActivity">
 
-    <View
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/material_layout_vertical_spacing_status_bar" />
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:cardCornerRadius="0dp">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?actionBarSize">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:theme="@style/USecurityToolbarTheme" />
 
             <io.codetail.widget.RevealFrameLayout
@@ -63,25 +62,26 @@
                         android:hint="@string/search"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="@color/midnight_blue50" />
                 </LinearLayout>
             </io.codetail.widget.RevealFrameLayout>
         </FrameLayout>
-    </android.support.v7.widget.CardView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            app:tabBackground="@color/colorPrimary"
+            app:tabIndicatorColor="@color/midnight_blue"
+            app:tabSelectedTextColor="@color/midnight_blue"
+            app:tabTextColor="@color/secondary_text_light" />
+    </android.support.design.widget.AppBarLayout>
 
-        <com.arrg.android.app.usecurity.SideBar
-            android:id="@+id/sideBar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
-</LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/appViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>

@@ -73,7 +73,7 @@ public class SideBar extends View {
         this.mOnTouchingLetterChangedListener = listener;
     }
 
-    private int getLettersSize() {
+    public int getLettersSize() {
         return mLetters.length;
     }
 

@@ -4,9 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import com.cardinalsolutions.sectioned_adapter.Categorizable;
 
-import java.io.Serializable;
-
-public class App implements Categorizable, Serializable {
+public class App implements Categorizable {
 
     private Boolean isChecked = false;
     private Drawable appIcon;

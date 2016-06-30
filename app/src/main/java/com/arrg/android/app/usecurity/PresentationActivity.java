@@ -259,7 +259,7 @@ public class PresentationActivity extends AppCompatActivity {
                     if (allSettingsAndPermissionsAreReady()) {
                         PreferencesManager.putBoolean(getString(R.string.settings_done), allSettingsAndPermissionsAreReady());
 
-                        Navigator.with(this).build().goTo(ApplicationListActivity.class).animation().commit();
+                        Navigator.with(this).build().goTo(AppListActivity.class).animation().commit();
                         finish();
                     } else {
                         if (!pinWasConfigured()) {

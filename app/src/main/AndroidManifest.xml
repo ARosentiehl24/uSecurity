@@ -49,16 +49,19 @@
         <activity
             android:name=".PresentationActivity"
             android:theme="@style/IntroductionAppTheme" />
-        <activity android:name=".ApplicationListActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ApplicationListActivity"
+            android:parentActivityName=".AppListActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.arrg.android.app.usecurity.ApplicationListActivity" />
+                android:value="com.arrg.android.app.usecurity.AppListActivity" />
         </activity>
+        <activity
+            android:name=".AppListActivity"
+            android:label="@string/title_activity_app_list"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

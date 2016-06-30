@@ -1,25 +1,28 @@
 package com.arrg.android.app.usecurity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.jaouan.revealator.Revealator;
+import com.norbsoft.typefacehelper.ActionBarHelper;
 import com.norbsoft.typefacehelper.TypefaceHelper;
 
 import org.fingerlinks.mobile.android.navigator.Navigator;
@@ -35,10 +38,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.arrg.android.app.usecurity.USecurity.DURATIONS_OF_ANIMATIONS;
-import static com.arrg.android.app.usecurity.USecurity.LOCKED_APPS_PREFERENCES;
-import static com.arrg.android.app.usecurity.USecurity.PACKAGES_APPS_PREFERENCES;
 
-public class ApplicationListActivity extends AppCompatActivity {
+public class AppListActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -48,30 +49,30 @@ public class ApplicationListActivity extends AppCompatActivity {
     AppCompatEditText searchInput;
     @Bind(R.id.revealView)
     LinearLayout revealView;
-    @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @Bind(R.id.sideBar)
-    SideBar sideBar;
+    @Bind(R.id.tabLayout)
+    TabLayout tabLayout;
+    @Bind(R.id.appViewPager)
+    ViewPager appViewPager;
+
+    public static final int ALL_APPS_FRAGMENT = 0;
+    public static final int APPS_LOCKED_FRAGMENT = 1;
+    public static final int APPS_UNLOCKED_FRAGMENT = 2;
 
     private ArrayList<App> apps;
-    private Integer index;
-    private SharedPreferences lockedAppsPreferences;
-    private SharedPreferences packagesAppsPreferences;
-    private SharedPreferencesUtil preferencesUtil;
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_application_list);
+        setContentView(R.layout.activity_app_list);
         ButterKnife.bind(this);
         TypefaceHelper.typeface(this);
 
         setSupportActionBar(toolbar);
 
+        ActionBarHelper.setTitle(getSupportActionBar(), TypefaceHelper.typeface(this, R.string.title_activity_app_list));
+
         apps = new ArrayList<>();
-        preferencesUtil = new SharedPreferencesUtil(this);
-        lockedAppsPreferences = getSharedPreferences(LOCKED_APPS_PREFERENCES, Context.MODE_PRIVATE);
-        packagesAppsPreferences = getSharedPreferences(PACKAGES_APPS_PREFERENCES, Context.MODE_PRIVATE);
 
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -89,8 +90,10 @@ public class ApplicationListActivity extends AppCompatActivity {
                     }
                 }
 
-                AppAdapter appAdapter = new AppAdapter(ApplicationListActivity.this, filteredApps, lockedAppsPreferences, packagesAppsPreferences, preferencesUtil);
-                recyclerView.setAdapter(appAdapter);
+                int position = appViewPager.getCurrentItem();
+
+                AppListFragment appListFragment = (AppListFragment) sectionsPagerAdapter.getItem(position);
+                appListFragment.setAdapter(position, filteredApps);
             }
 
             @Override
@@ -99,31 +102,13 @@ public class ApplicationListActivity extends AppCompatActivity {
             }
         });
 
-        sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
-            @Override
-            public void onTouchingLetterChanged(String s) {
-                index = 0;
-
-                for (App app : apps){
-                    if (app.getAppName().substring(0, 1).toUpperCase().equals(s.toUpperCase())) {
-                        break;
-                    }
-                    index++;
-                }
-
-                recyclerView.scrollToPosition(index);
-
-                Log.e("Scroll", "Child: " + recyclerView.getChildCount());
-            }
-        });
-
         new LoadApplications().execute();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_application_list, menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_app_list, menu);
+        return true;
     }
 
     @Override
@@ -138,6 +123,13 @@ public class ApplicationListActivity extends AppCompatActivity {
                         .withChildAnimationDuration(DURATIONS_OF_ANIMATIONS)
                         .withTranslateDuration(DURATIONS_OF_ANIMATIONS)
                         .withChildsAnimation()
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchInput.requestFocus();
+                                toggleKeyboard();
+                            }
+                        })
                         .start();
                 break;
             case R.id.action_settings:
@@ -155,11 +147,53 @@ public class ApplicationListActivity extends AppCompatActivity {
                 .withEndAction(new TimerTask() {
                     @Override
                     public void run() {
-                        AppAdapter appAdapter = new AppAdapter(ApplicationListActivity.this, apps, lockedAppsPreferences, packagesAppsPreferences, preferencesUtil);
-                        recyclerView.setAdapter(appAdapter);
+                        searchInput.getText().clear();
+                        toggleKeyboard();
                     }
                 })
                 .start();
+    }
+
+    public void toggleKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isActive()) {
+            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        } else {
+            inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private ArrayList<App> apps;
+
+        public SectionsPagerAdapter(FragmentManager fm, ArrayList<App> apps) {
+            super(fm);
+            this.apps = apps;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return AppListFragment.newInstance(position, apps);
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case ALL_APPS_FRAGMENT:
+                    return getString(R.string.apps);
+                case APPS_LOCKED_FRAGMENT:
+                    return getString(R.string.apps_locked);
+                case APPS_UNLOCKED_FRAGMENT:
+                    return getString(R.string.apps_unlocked);
+            }
+            return null;
+        }
     }
 
     public ArrayList<App> getInstalledApplications(List<ApplicationInfo> applicationInfoList) {
@@ -207,26 +241,13 @@ public class ApplicationListActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<App> apps) {
             super.onPostExecute(apps);
 
-            ApplicationListActivity.this.apps = apps;
+            AppListActivity.this.apps = apps;
 
-            AppAdapter appAdapter = new AppAdapter(ApplicationListActivity.this, apps, lockedAppsPreferences, packagesAppsPreferences, preferencesUtil);
+            sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), apps);
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-            recyclerView.setHasFixedSize(true);
-            recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL_LIST));
-            recyclerView.setAdapter(appAdapter);
+            appViewPager.setAdapter(sectionsPagerAdapter);
 
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-            });
+            tabLayout.setupWithViewPager(appViewPager);
         }
     }
 }

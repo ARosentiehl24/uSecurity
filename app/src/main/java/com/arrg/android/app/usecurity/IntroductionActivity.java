@@ -34,7 +34,7 @@ public class IntroductionActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Navigator.with(IntroductionActivity.this).build().goTo(ApplicationListActivity.class).animation().commit();
+                    Navigator.with(IntroductionActivity.this).build().goTo(AppListActivity.class).animation().commit();
                     finish();
                 }
             }, 250);
