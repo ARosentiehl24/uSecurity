@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -97,12 +98,12 @@ public class CircleCheckBox extends View {
                     0, 0);
 
             try {
-                setTickColorHex(a.getString(R.styleable.CircleCheckbox_tickColor));
-                setTextColorHex(a.getString(R.styleable.CircleCheckbox_textColor));
+                setTickColor(a.getColor(R.styleable.CircleCheckbox_tickColor, ContextCompat.getColor(context, R.color.background_light)));
+                setTextColor(a.getColor(R.styleable.CircleCheckbox_textColor, ContextCompat.getColor(context, R.color.primary_text_default_light)));
                 setShowOuterCircle(a.getBoolean(R.styleable.CircleCheckbox_showOuterCircle, true));
-                setInnerCircleColorHex(a.getString(R.styleable.CircleCheckbox_innerCircleColor));
-                setOuterCircleColorHex(a.getString(R.styleable.CircleCheckbox_outerCircleColor));
-                setCircleBorderColorHex(a.getString(R.styleable.CircleCheckbox_circleBorderColor));
+                setInnerCircleColor(a.getColor(R.styleable.CircleCheckbox_innerCircleColor, ContextCompat.getColor(context, R.color.midnight_blue50)));
+                setOuterCircleColor(a.getColor(R.styleable.CircleCheckbox_outerCircleColor, ContextCompat.getColor(context, R.color.midnight_blue75)));
+                setCircleBorderColor(a.getColor(R.styleable.CircleCheckbox_circleBorderColor, ContextCompat.getColor(context, R.color.midnight_blue)));
                 setTickThickness(a.getDimension(R.styleable.CircleCheckbox_tickThickness, tickThickness));
                 setBorderThickness(a.getDimension(R.styleable.CircleCheckbox_borderThickness, borderThickness));
                 setTextLeftPadding(a.getDimension(R.styleable.CircleCheckbox_textLeftPadding, textLeftPadding));
