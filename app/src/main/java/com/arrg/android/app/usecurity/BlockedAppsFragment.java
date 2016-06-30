@@ -1,5 +1,6 @@
 package com.arrg.android.app.usecurity;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +22,11 @@ import butterknife.ButterKnife;
 import static com.arrg.android.app.usecurity.USecurity.LOCKED_APPS_PREFERENCES;
 import static com.arrg.android.app.usecurity.USecurity.PACKAGES_APPS_PREFERENCES;
 
-public class AppListFragment extends Fragment {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class BlockedAppsFragment extends Fragment {
 
     private static final String ARG_APPS = "apps";
     private static final String ARG_POSITION = "position";
@@ -33,19 +38,20 @@ public class AppListFragment extends Fragment {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    public AppListFragment() {
+    public BlockedAppsFragment() {
+        // Required empty public constructor
     }
 
-    public static AppListFragment newInstance(int position, ArrayList<App> apps) {
-        AppListFragment appListFragment = new AppListFragment();
+    public static BlockedAppsFragment newInstance(int position, ArrayList<App> apps) {
+        BlockedAppsFragment blockedAppsFragment = new BlockedAppsFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, position);
         args.putSerializable(ARG_APPS, apps);
 
-        appListFragment.setArguments(args);
+        blockedAppsFragment.setArguments(args);
 
-        return appListFragment;
+        return blockedAppsFragment;
     }
 
     @Override
@@ -74,14 +80,9 @@ public class AppListFragment extends Fragment {
         Bundle bundle = getArguments();
 
         ArrayList<App> apps = (ArrayList<App>) bundle.getSerializable(ARG_APPS);
-        Integer index = bundle.getInt(ARG_POSITION);
+        Integer position = bundle.getInt(ARG_POSITION);
 
-        setAdapter(index, apps);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        setAdapter(position, apps);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class AppListFragment extends Fragment {
         ArrayList<App> appArrayList = new ArrayList<>();
 
         for (App app : apps) {
-            if (!preferencesUtil.getBoolean(lockedAppsPreferences, app.getAppPackage(), false)) {
+            if (preferencesUtil.getBoolean(lockedAppsPreferences, app.getAppPackage(), false)) {
                 appArrayList.add(app);
             }
         }

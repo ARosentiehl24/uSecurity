@@ -6,11 +6,10 @@ import android.content.SharedPreferences;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -52,12 +51,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         holder.appIcon.setImageDrawable(app.getAppIcon());
         holder.appName.setText(app.getAppName());
-
-        if (lockedAppsPreferences.contains(app.getAppPackage())) {
-            holder.circleCheckBox.setChecked(preferencesUtil.getBoolean(lockedAppsPreferences, app.getAppPackage(), false));
-
-            Log.e("AdapterView", app.getAppName() + " - " + preferencesUtil.getBoolean(lockedAppsPreferences, app.getAppPackage(), false));
-        }
+        holder.switchCompat.setChecked(preferencesUtil.getBoolean(lockedAppsPreferences, app.getAppPackage(), false));
     }
 
     @Override
@@ -81,8 +75,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         AppCompatImageView appIcon;
         @Bind(R.id.appName)
         AppCompatTextView appName;
-        @Bind(R.id.circleCheckBox)
-        CircleCheckBox circleCheckBox;
+        @Bind(R.id.switchCompat)
+        SwitchCompat switchCompat;
 
         private Activity context;
         private ArrayList<App> apps;
@@ -108,22 +102,13 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         public void onClick(View view) {
             App app = apps.get(getLayoutPosition());
 
-            /*app.setChecked(!app.getChecked());
+            app.setChecked(!app.getChecked());
 
-            circleCheckBox.setChecked(app.getChecked());*/
+            switchCompat.setChecked(app.getChecked());
 
             preferencesUtil.putValue(lockedAppsPreferences, app.getAppPackage(), app.getChecked());
 
-            Toast.makeText(context, "Apps in fragment: " + apps.size() + "\n" + app.getAppName() + " - Pos: " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-            /*switch (position) {
-                case ALL_APPS_FRAGMENT:
-                    Toast.makeText(context, "Apps in fragment: " + apps.size() + "\n" + app.getAppName() + " - Pos: " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    removeApp(getLayoutPosition());
-                    Toast.makeText(context, "Apps in fragment: " + apps.size(), Toast.LENGTH_SHORT).show();
-                    break;
-            }*/
+            removeApp(getLayoutPosition());
         }
 
         @Override

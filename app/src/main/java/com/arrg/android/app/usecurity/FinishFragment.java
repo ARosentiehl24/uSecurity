@@ -27,7 +27,6 @@ public class FinishFragment extends Fragment {
     private PresentationActivity presentationActivity;
 
     public FinishFragment() {
-        // Required empty public constructor
     }
 
     public static FinishFragment newInstance() {

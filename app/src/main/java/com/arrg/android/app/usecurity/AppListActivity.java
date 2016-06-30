@@ -91,9 +91,6 @@ public class AppListActivity extends AppCompatActivity {
                 }
 
                 int position = appViewPager.getCurrentItem();
-
-                AppListFragment appListFragment = (AppListFragment) sectionsPagerAdapter.getItem(position);
-                appListFragment.setAdapter(position, filteredApps);
             }
 
             @Override
@@ -174,7 +171,15 @@ public class AppListActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return AppListFragment.newInstance(position, apps);
+            switch (position) {
+                case ALL_APPS_FRAGMENT:
+                    return AppListFragment.newInstance(position, apps);
+                case APPS_LOCKED_FRAGMENT:
+                    return BlockedAppsFragment.newInstance(position, apps);
+                case APPS_UNLOCKED_FRAGMENT:
+                    return UnblockedAppsFragment.newInstance(position, apps);
+            }
+            return null;
         }
 
         @Override

@@ -123,7 +123,7 @@ public class PresentationActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                
             }
 
             @Override
@@ -197,15 +197,17 @@ public class PresentationActivity extends AppCompatActivity {
                         ((RequestPatternFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem())).resetPattern();
                         break;
                     case FINGERPRINT:
+                        RequestFingerprintFragment requestFingerprintFragment = (RequestFingerprintFragment) sectionsPagerAdapter.getItem(viewPager.getCurrentItem());
+
                         if (hasEnrolledFingerprints()) {
                             if (fingerprintRecognition) {
-                                Toast.makeText(this, R.string.fingerprint_disable_message, Toast.LENGTH_SHORT).show();
+                                requestFingerprintFragment.updateMessage(R.string.fingerprint_disable_message);
 
                                 PreferencesManager.putBoolean(getString(R.string.fingerprint_recognition_activated), false);
 
                                 btnAux.setText(R.string.enable_fingerprint_support);
                             } else {
-                                Toast.makeText(this, R.string.fingerprint_enable_message, Toast.LENGTH_SHORT).show();
+                                requestFingerprintFragment.updateMessage(R.string.fingerprint_enable_message);
 
                                 PreferencesManager.putBoolean(getString(R.string.fingerprint_recognition_activated), true);
 
